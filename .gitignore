@@ -1,0 +1,52 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+/logs/
+
+# Virtual environments
+venv/
+.env
+.env.*
+
+# Secrets / keys
+*.pem
+*.key
+
+# Database files
+*.sqlite3
+*.db
+
+# Docker
+docker-compose.override.yml
+*.tar
+*.tgz
+*.zip
+*.dockerignore
+
+# Node / Frontend (if any)
+node_modules/
+dist/
+build/
+
+# Terraform local files
+.terraform/
+*.tfstate
+*.tfstate.backup
+terraform.tfvars
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Ignore large files (you can also use Git LFS for them)
+*.csv
+*.zip
+*.tar.gz

@@ -1,0 +1,61 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5
+      start_period: 5s
+
+  backend:
+    build: ./backend   # 👈 Path to your backend Dockerfile
+    container_name: backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_NAME: mydb
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_PORT: 5432
+    volumes:
+      - logs:/logs
+
+  frontend:
+    build: ./frontend   # 👈 Path to your frontend Dockerfile
+    container_name: frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      backend:
+        condition: service_started
+    environment:
+      BACKEND_URL: http://backend:5000/api/data
+
+  logger:
+    build: ./logger   # 👈 Path to your logger Dockerfile
+    container_name: logger
+    depends_on:
+      backend:
+        condition: service_started
+    volumes:
+      - logs:/logs  
+
+volumes:
+  pgdata:
+  logs:
